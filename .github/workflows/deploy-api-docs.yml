@@ -1,9 +1,10 @@
 name: Deploy API Documentation to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
+  # Uncomment to enable automatic deployment on push
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 permissions:
