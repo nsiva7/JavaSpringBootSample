@@ -1,0 +1,140 @@
+name: Deploy API Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Start Spring Boot application
+        run: |
+          ./gradlew bootRun &
+          echo $! > app.pid
+          echo "Waiting for application to start..."
+          sleep 30
+
+      - name: Wait for application to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f http://localhost:8080/v3/api-docs; do sleep 2; done'
+
+      - name: Export OpenAPI specification
+        run: |
+          mkdir -p docs
+          curl -o docs/openapi.json http://localhost:8080/v3/api-docs
+
+      - name: Stop Spring Boot application
+        run: |
+          if [ -f app.pid ]; then
+            kill $(cat app.pid) || true
+            rm app.pid
+          fi
+
+      - name: Generate Swagger UI
+        run: |
+          cd docs
+
+          # Download Swagger UI
+          SWAGGER_VERSION="5.11.0"
+          curl -L https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${SWAGGER_VERSION}.tar.gz -o swagger-ui.tar.gz
+          tar -xzf swagger-ui.tar.gz
+
+          # Copy necessary files
+          cp -r swagger-ui-${SWAGGER_VERSION}/dist/* .
+
+          # Update swagger-initializer.js to point to our OpenAPI spec
+          cat > swagger-initializer.js << 'EOF'
+          window.onload = function() {
+            window.ui = SwaggerUIBundle({
+              url: "openapi.json",
+              dom_id: '#swagger-ui',
+              deepLinking: true,
+              presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+              ],
+              plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+              ],
+              layout: "StandaloneLayout"
+            });
+          };
+          EOF
+
+          # Clean up
+          rm -rf swagger-ui-${SWAGGER_VERSION} swagger-ui.tar.gz
+
+          # Create a simple index redirect
+          cat > index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Student Management API Documentation</title>
+              <link rel="stylesheet" type="text/css" href="swagger-ui.css" />
+              <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+              <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+              <style>
+                  html {
+                      box-sizing: border-box;
+                      overflow: -moz-scrollbars-vertical;
+                      overflow-y: scroll;
+                  }
+                  *, *:before, *:after {
+                      box-sizing: inherit;
+                  }
+                  body {
+                      margin:0;
+                      padding:0;
+                  }
+              </style>
+          </head>
+          <body>
+              <div id="swagger-ui"></div>
+              <script src="swagger-ui-bundle.js" charset="UTF-8"></script>
+              <script src="swagger-ui-standalone-preset.js" charset="UTF-8"></script>
+              <script src="swagger-initializer.js" charset="UTF-8"></script>
+          </body>
+          </html>
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
