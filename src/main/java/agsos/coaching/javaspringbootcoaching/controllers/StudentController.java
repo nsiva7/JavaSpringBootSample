@@ -1,5 +1,6 @@
-package agsos.coaching.javaspringbootcoaching;
+package agsos.coaching.javaspringbootcoaching.controllers;
 
+import agsos.coaching.javaspringbootcoaching.models.Student;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
