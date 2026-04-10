@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 public class UserController {
 
-    private Map<String, User> users;
+    private final Map<String, User> users;
 
     UserController() {
         System.out.println("UserController");
@@ -38,5 +38,25 @@ public class UserController {
     @PostMapping("/create_user")
     ResponseEntity<User> createUser(@RequestBody User user) {
         return ResponseEntity.ok(users.put(user.getId(), user));
+    }
+
+    @PutMapping("/users/{id}")
+    ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
+        if (users.containsKey(id)) {
+            users.put(id, user);
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/users/{id}")
+    ResponseEntity<User> deleteUser(@PathVariable String id) {
+        if (users.containsKey(id)) {
+            User deletedUser = users.remove(id);
+            return ResponseEntity.ok(deletedUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
