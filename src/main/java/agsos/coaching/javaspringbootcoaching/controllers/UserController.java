@@ -1,6 +1,7 @@
 package agsos.coaching.javaspringbootcoaching.controllers;
 
 import agsos.coaching.javaspringbootcoaching.models.User;
+import agsos.coaching.javaspringbootcoaching.pages.PortfolioPage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,5 +59,26 @@ public class UserController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/hello")
+    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+        return String.format("Hello %s!", name);
+    }
+
+    @GetMapping("/web")
+    public String hello() {
+        return PortfolioPage.myPortfolio();
+    }
+
+    @GetMapping("/tmpUser")
+    public ResponseEntity<User> tmpUser() {
+
+        if (!users.containsKey("tmpUser")) {
+            return ResponseEntity.noContent().build();
+        }
+
+//        return ResponseEntity.ok(users.get("siva"));
+        return ResponseEntity.ok(new User("Siva", "Siva"));
     }
 }
