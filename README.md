@@ -116,7 +116,7 @@ The project includes a GitHub Actions workflow that automatically:
 After the workflow completes, your API documentation will be available at:
 
 ```
-https://<your-username>.github.io/<repository-name>/
+https://nsiva7.github.io/JavaSpringBootSample
 ```
 
 ### Workflow Permissions
