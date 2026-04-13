@@ -56,7 +56,7 @@ Once the application is running, you can access:
 ```json
 {
   "id": 1,
-  "name": "John Doe",
+  "name": "Siva N",
   "age": 20
 }
 ```
@@ -87,7 +87,7 @@ curl -X POST http://localhost:8080/api/students \
 # Update a student
 curl -X PUT http://localhost:8080/api/students/1 \
   -H "Content-Type: application/json" \
-  -d '{"name":"John Doe Updated","age":25}'
+  -d '{"name":"Siva N Updated","age":25}'
 
 # Delete a student
 curl -X DELETE http://localhost:8080/api/students/1
@@ -168,8 +168,8 @@ src/
 
 The application comes pre-loaded with sample students:
 
-- ID: 1, Name: "John Doe", Age: 20
-- ID: 2, Name: "Jane Smith", Age: 22
+- ID: 1, Name: "Siva N", Age: 20
+- ID: 2, Name: "Sri Ram", Age: 22
 
 ## License
 

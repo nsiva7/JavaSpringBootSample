@@ -34,7 +34,7 @@ PUT {{baseUrl}}/1
 Content-Type: application/json
 
 {
-  "name": "John Doe Updated",
+  "name": "Siva N Updated",
   "age": 25
 }
 

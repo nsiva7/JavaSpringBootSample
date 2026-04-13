@@ -29,8 +29,8 @@ public class StudentController {
     public StudentController() {
         System.out.println("Creating Student Controller");
 
-        students.put(1L, new Student(1L, "John Doe", 20));
-        students.put(2L, new Student(2L, "Jane Smith", 22));
+        students.put(1L, new Student(1L, "Siva N", 20));
+        students.put(2L, new Student(2L, "Sri Ram", 22));
 
         idGenerator.set(3L);
     }
