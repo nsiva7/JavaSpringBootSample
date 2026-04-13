@@ -1,9 +1,10 @@
 package siva.nimmala.springbootsample.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,12 +12,20 @@ import java.io.File;
 
 @RestController
 @RequestMapping("/api/files")
+@Tag(name = "Multipart", description = "APIs for uploading file and save.")
 public class SampleMultipartController {
 
-    private static final String uploadDir = "/Users/nsiva7/Workspace/Coaching/JavaSpringBootCoaching/Uploads";
+    SampleMultipartController() {
+        System.out.println("Execution Dir: " + System.getProperty("user.dir"));
+    }
 
-    @PostMapping("/profile")
-    public ResponseEntity<String> uploadProfile(@RequestParam("file") MultipartFile file) {
+    private static final String uploadDir = System.getProperty("user.dir") + "/Uploads";
+
+    @PostMapping(value = "/profile", consumes = "multipart/form-data")
+    public ResponseEntity<String> uploadProfile(
+//            @RequestParam("file") MultipartFile file
+            @RequestPart("file") MultipartFile file
+    ) {
         try {
             File dir = new File(uploadDir);
             if (!dir.exists()) {
