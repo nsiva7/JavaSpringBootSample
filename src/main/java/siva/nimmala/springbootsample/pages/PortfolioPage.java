@@ -1,4 +1,4 @@
-package agsos.coaching.javaspringbootcoaching.pages;
+package siva.nimmala.springbootsample.pages;
 
 public class PortfolioPage {
 

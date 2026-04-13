@@ -1,7 +1,7 @@
-package agsos.coaching.javaspringbootcoaching.controllers;
+package siva.nimmala.springbootsample.controllers;
 
-import agsos.coaching.javaspringbootcoaching.models.User;
-import agsos.coaching.javaspringbootcoaching.pages.PortfolioPage;
+import siva.nimmala.springbootsample.models.User;
+import siva.nimmala.springbootsample.pages.PortfolioPage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

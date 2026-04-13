@@ -1,4 +1,4 @@
-package agsos.coaching.javaspringbootcoaching.controllers;
+package siva.nimmala.springbootsample.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

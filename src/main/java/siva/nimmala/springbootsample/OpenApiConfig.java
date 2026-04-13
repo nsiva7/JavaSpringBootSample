@@ -1,4 +1,4 @@
-package agsos.coaching.javaspringbootcoaching;
+package siva.nimmala.springbootsample;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

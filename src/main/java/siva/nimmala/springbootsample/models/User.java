@@ -1,4 +1,4 @@
-package agsos.coaching.javaspringbootcoaching.models;
+package siva.nimmala.springbootsample.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

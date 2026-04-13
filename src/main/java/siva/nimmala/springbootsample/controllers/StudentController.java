@@ -1,6 +1,6 @@
-package agsos.coaching.javaspringbootcoaching.controllers;
+package siva.nimmala.springbootsample.controllers;
 
-import agsos.coaching.javaspringbootcoaching.models.Student;
+import siva.nimmala.springbootsample.models.Student;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

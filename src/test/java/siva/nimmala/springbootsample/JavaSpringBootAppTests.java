@@ -1,10 +1,10 @@
-package agsos.coaching.javaspringbootcoaching;
+package siva.nimmala.springbootsample;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JavaSpringBootCoachingApplicationTests {
+class JavaSpringBootAppTests {
 
     @Test
     void contextLoads() {
