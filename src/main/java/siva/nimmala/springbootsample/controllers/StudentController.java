@@ -1,6 +1,5 @@
 package siva.nimmala.springbootsample.controllers;
 
-import siva.nimmala.springbootsample.models.Student;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,15 +7,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import siva.nimmala.springbootsample.models.Student;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static siva.nimmala.springbootsample.controllers.StudentAPIs.createStudentAPI;
+import static siva.nimmala.springbootsample.data.Constants.*;
 
 @RestController
 @RequestMapping("/api/students")
@@ -28,25 +30,26 @@ public class StudentController {
 
     public StudentController() {
         System.out.println("Creating Student Controller");
-
-        students.put(1L, new Student(1L, "Siva N", 20));
-        students.put(2L, new Student(2L, "Sri Ram", 22));
-
-        idGenerator.set(3L);
     }
 
-    @Operation(summary = "Create a new student", description = "Creates a new student record with auto-generated ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Student created successfully",
-                    content = @Content(schema = @Schema(implementation = Student.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
-    })
+    @Operation(summary = CREATE_A_NEW_STUDENT, description = CREATES_A_NEW_STUDENT_RECORD_WITH_AUTO_GENERATED_ID)
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = STATUS_200,
+                            description = STUDENT_CREATED_SUCCESSFULLY,
+                            content = @Content(schema = @Schema(implementation = Student.class))
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid input",
+                            content = @Content
+                    )
+            }
+    )
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Long id = idGenerator.getAndIncrement();
-        Student newStudent = new Student(id, student.name(), student.age());
-        students.put(id, newStudent);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newStudent);
+        return createStudentAPI(student, idGenerator, students);
     }
 
     @Operation(summary = "Get all students", description = "Retrieves a list of all student records")
